@@ -1,6 +1,9 @@
-package Chess;
+package chess;
 
 import boardgame.Board;
+import boardgame.Position;
+import chess.piece.King;
+import chess.piece.Rook;
 
 public class ChessMatch {
 	
@@ -11,6 +14,7 @@ public class ChessMatch {
 	//QUEM PRECISA SABER A DIMENSÃO DO TABULEIRA É A CLASSE CHESSMATCH
 	public ChessMatch() {
 		board = new Board(8, 8);
+		initialSetup();
 	}
 	
 	//O TABULEIRO (BOARD) TEM AS PEÇAS
@@ -26,6 +30,14 @@ public class ChessMatch {
 		
 		return mat;
 		
+	}
+	
+	/// RESPONSÁVEL POR INICIAR A PARTIDA E COLOCAR AS PEÇAS NO TABULEIRO
+	/// PARA INICIAR PRECISO CHAMAR ESSE MÉTODO NO CONSTRUTOR DA CLASSE
+	private void initialSetup() {
+		board.placePiece(new Rook(board, Color.WHITE), new Position(0, 0));
+		board.placePiece(new King(board, Color.BLACK), new Position(7, 4));
+		board.placePiece(new King(board, Color.WHITE), new Position(0, 3));
 	}
 
 }
