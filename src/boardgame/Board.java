@@ -1,24 +1,25 @@
 package boardgame;
 
 public class Board {
-	
+
 	private int rows;
 	private int columns;
 	private Piece[][] pieces; // MATRIZ DE PEÇAS DO TABULEIRO
-	
+
 	// CONSTRUTOR:
 	// PROGRAMAÇÃO DEFENSIVA
 	public Board(int rows, int columns) {
-		//super();
-		
-		//Não permitir que seja criado tabuleiro menor que o correto
+		// super();
+
+		// Não permitir que seja criado tabuleiro menor que o correto
 		if (rows < 1 || columns < 1) {
 			throw new BoardException("Error creating board: there mes be at least 1 row and 1 column");
 		}
 		this.rows = rows;
 		this.columns = columns;
-		
-		// MANUALLY: Informando que as peças serão iniciadas com a quantidade de "rows" e "columns" informadas.
+
+		// MANUALLY: Informando que as peças serão iniciadas com a quantidade de "rows"
+		// e "columns" informadas.
 		pieces = new Piece[rows][columns];
 	}
 
@@ -26,39 +27,37 @@ public class Board {
 		return rows;
 	}
 
-	/* REMOVIDO PARA NÃO SER POSSÍVEL ALTERAÇÃO NAS LINHAS
-	public void setRows(int rows) {
-		this.rows = rows;
-	}
-	*/
+	/*
+	 * REMOVIDO PARA NÃO SER POSSÍVEL ALTERAÇÃO NAS LINHAS public void setRows(int
+	 * rows) { this.rows = rows; }
+	 */
 
 	public int getColumns() {
 		return columns;
 	}
 
-	/* REMOVIDO PARA NÃO SER POSSÍVEL ALTERAÇÃO NAS COLUNAS
-	public void setColumns(int columns) {
-		this.columns = columns;
-	}
-	*/
+	/*
+	 * REMOVIDO PARA NÃO SER POSSÍVEL ALTERAÇÃO NAS COLUNAS public void
+	 * setColumns(int columns) { this.columns = columns; }
+	 */
 
-	//PROGRAMAÇÃO DEFENSIVA
+	// PROGRAMAÇÃO DEFENSIVA
 	public Piece piece(int row, int column) {
 		if (!positionExists(row, column)) {
 			throw new BoardException("Position not on the board!");
 		}
 		return pieces[row][column];
 	}
-	
-	//SOBRECARGA: RETORNA A PEÇA PELA POSIÇÃO 
+
+	// SOBRECARGA: RETORNA A PEÇA PELA POSIÇÃO
 	public Piece piece(Position position) {
 		if (!positionExists(position)) {
 			throw new BoardException("Position not on the board!");
 		}
 		return pieces[position.getRow()][position.getColumn()];
 	}
-	
-	//MATRIZ DE PIECES DECLARADA NA CLASSE
+
+	// MATRIZ DE PIECES DECLARADA NA CLASSE
 	public void placePiece(Piece piece, Position position) {
 		if (thereIsAPiece(position)) {
 			throw new BoardException("There is already a piece on position " + position + "!");
@@ -66,20 +65,38 @@ public class Board {
 		pieces[position.getRow()][position.getColumn()] = piece;
 		piece.position = position;
 	}
-	
+
+	public Piece removePiece(Position position) {
+		// DEFENSIVE PROGRAMMING
+		if (!positionExists(position)) {
+			throw new BoardException("Position not on the board!");
+		}
+		if (piece(position) == null) {
+			return null;
+		}
+
+		Piece aux = piece(position);
+		aux.position = null;
+		pieces[position.getRow()][position.getColumn()] = null;
+		
+		//retorno a peça que foi retirada
+		return aux;
+
+	}
+
 	private boolean positionExists(int row, int column) {
 		return row >= 0 && row < rows && column >= 0 && column < columns;
 	}
-	
+
 	public boolean positionExists(Position position) {
 		return positionExists(position.getRow(), position.getColumn());
 	}
-	
+
 	public boolean thereIsAPiece(Position position) {
 		if (!positionExists(position)) {
 			throw new BoardException("Position not on the board!");
 		}
 		return piece(position) != null;
 	}
-	
+
 }

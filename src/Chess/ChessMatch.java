@@ -1,6 +1,8 @@
 package chess;
 
 import boardgame.Board;
+import boardgame.Piece;
+import boardgame.Position;
 import chess.piece.King;
 import chess.piece.Rook;
 
@@ -31,6 +33,32 @@ public class ChessMatch {
 		
 	}
 	
+	public ChessPiece performChessMove(ChessPosition sourcePosition, ChessPosition targetPosition) {
+		Position source = sourcePosition.toPosition();
+		Position target = targetPosition.toPosition();
+		
+		validateSourcePosition(source);	//RESPONSÁVEL POR VALIDAR A POSIÇÃO DE ORIGEM (CASO CONTRÁRIOA LANÇA UMA EXCEÇÃO)
+		Piece capturedPiece = makeMove(source, target); //RESPONSÁVEL POR REALIZAR O MOVIMENTO DA PEÇA
+		return (ChessPiece) capturedPiece;
+	}
+	
+	
+	
+	private Piece makeMove(Position source, Position target) {
+		// TODO Auto-generated method stub
+		Piece p = board.removePiece(source); // REMOVE A PEÇA DA POSIÇÃO DE ORIGEM
+		Piece capturedPiece = board.removePiece(target); // REMOVE A PEÇA DA POSIÇÃO DE ORIGEM (PEÇA CAPTURADA)
+		board.placePiece(p, target); // COLOCA A PEÇA NA POSIÇÃO DE DESTINO
+		return capturedPiece; //RETORNA A PEÇA CAPTURADA
+	}
+
+	private void validateSourcePosition(Position position) {
+		// TODO Auto-generated method stub
+		if (!board.thereIsAPiece(position)) {
+			throw new ChessException("There is no piece on source position.");
+		}
+	}
+
 	//RECEBE AS COORDENADAS DO CHADREZ
 	private void placeNewPiece(char column, int row, ChessPiece piece) {
 		board.placePiece(piece, new ChessPosition(column, row).toPosition());
