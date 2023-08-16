@@ -17,6 +17,14 @@ public class Rook extends ChessPiece {
 	public String toString() {
 		return "R";  //Essa letra representará nosso objeto no tabuleiro
 	}
+
+
+	@Override
+	public boolean[][] possibleMoves() {
+		// TODO Auto-generated method stub
+		boolean[][] mat = new boolean[getBoard().getRows()][getBoard().getColumns()];
+		return mat;
+	}
 	
 	
 	
